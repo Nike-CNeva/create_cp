@@ -14,8 +14,8 @@ TOOL_LENGTHS = {
     "RECT_3X10": 10.0
 }
 
-class Cassette:
-    def __init__(self, tape, length, width, stamp, thickness, quantity, drainage=True, mounting=True, depth=20.0, rust=20.0):
+class KZTCassette:
+    def __init__(self, tape, length, width, stamp, thickness, quantity, depth=20.0, rust=20.0):
         self.tape = tape
         self.length = length
         self.width = width
@@ -24,8 +24,6 @@ class Cassette:
         self.stamp = stamp
         self.thickness = thickness
         self.quantity = quantity
-        self.drainage = drainage
-        self.mounting = mounting
         self.tool_map = []
         self.result = []
         self.stert_x = None
@@ -92,7 +90,6 @@ class Cassette:
             self.otv_x = None
             self.otv_y = None
 
-
     def add_tool_map(self, start_x, start_y, end_x, end_y, otv_x, otv_y, direction):
         if start_x is None or start_y is None:
             return  # если нет начальной точки — ничего не делаем
@@ -114,10 +111,7 @@ class Cassette:
             length = round((dx ** 2 + dy ** 2) ** 0.5, 8)
             self.lengths.append(length)
             orientation = 0 if abs(dy) < 0.001 else 90 if abs(dx) < 0.001 else None
-            
-            if length == 2.0:
-                return
-            
+
             if length == 16.75 or length == 18.75:
                 tool = "RECT_3X10"
                 punch = "STRIKE"
@@ -132,136 +126,26 @@ class Cassette:
                         start_x -= 8
                     else:
                         start_x -= 9
-            
-            elif length == 9 or length == 8:
-                tool = "RECT_3X10"
-                punch = "STRIKE"
-                step = None
-                if start_y > 10:
-                    if direction == "up":
-                        start_y += 5
 
-                    elif direction == "down":
-                        start_y -= 4
-                else:
-                    if direction == "up":
-                        start_y += 3
-
-                    elif direction == "down":
-                        start_y -= 5
-
-            elif length == 10:
-                tool = "RECT_3X10"
-                punch = "STRIKE"
-                step = None
-                if direction == "up":
-                    start_y += 6
-
-                elif direction == "down":
-                    start_y -= 4
-
-            elif length == 13.0:
-                tool = "RECT_3X10"
-                punch = "NIBBLE"
-                step = 8
-                start_x += 1
-                end_x -= 1
-            
-            elif length == 14.18:
-                tool = "RECT_3X10"
-                punch = "NIBBLE"
-                step = 8
-                if start_x < 20:
-                    start_x -= 1
-                else:
-                    end_x += 1
-            
-            elif 18.9 < length < 19.0:
-                tool = "RECT_3X10"
-                punch = "NIBBLE"
-                step = 8
-                if start_x < 50:
-                    start_x += 7.2312
-                    end_x -= 8.7316746
-                    start_y -= 7.294
-                    end_y += 7.696
-                    orientation = 330
-                else:
-                    start_x -= 0.7772254
-                    end_x += 2.2777
-                    start_y += 2.2057
-                    end_y -= 1.8043
-                    orientation = 30
-            
-            elif length == 20.0:
-                tool = "RECT_3X10"
-                punch = "NIBBLE"
-                step = 8
-                if start_x < 60:
-                    end_x += 1
-                else:
-                    start_x -= 1
-
-                
-            elif length == 21.0:
-                tool = "TRIANGLE4"
-                punch = "STRIKE"
-                step = None
-                if start_x < 50:
-                    orientation = 30
-                    start_x -= 4.1112
-                    start_y -= 7.7452
-                else:
-                    orientation = 0
-                    start_x += 4
-                    start_y += 13.2846
-            
             elif 20 < length < 30:
                 tool = "RECT_3X10"
                 punch = "NIBBLE"
                 step = 8
-                if self.tape == "kzt":
-                    start_x -= 4
-                    end_x += 4
-                else:    
-                    if direction == "right":
-                        if start_x < 50:
-                            start_x
-                            end_x += 1
-                        else:
-                            start_x += 1
-                            end_x 
-                    elif direction == "left":
-                        if start_x < 50:
-                            start_x += 1
-                            end_x 
-                        else:
-                            start_x 
-                            end_x += 1
-                        
-            elif length == 31.5:
-                tool = "RECT_3X10"
-                punch = "NIBBLE"
-                step = 8
-                if start_x < 50:
-                    start_y -= 1
-                else:
-                    end_y -= 1
+                if direction == "right":
+                    if start_x < 50:
+                        start_x
+                        end_x += 1
+                    else:
+                        start_x += 1
+                        end_x 
+                elif direction == "left":
+                    if start_x < 50:
+                        start_x += 1
+                        end_x 
+                    else:
+                        start_x 
+                        end_x += 1
             
-                
-            elif 18.6 < length < 18.7:
-                tool = "TRIANGLE4"
-                punch = "STRIKE"
-                step = None
-                if start_x < 50:
-                    start_x -= 9.5047746
-                    start_y += 10.1064
-                    orientation = 60
-                else:
-                    start_x -= 6.7106
-                    start_y += 0.87284242
-                    orientation = 330
-                
             elif length == 18.5:
                 tool = "RECT_5X30"
                 punch = "STRIKE"
@@ -292,16 +176,9 @@ class Cassette:
                     else:
                         start_y += 4.2 # правый верх
 
-            elif length == 46:
-                tool = "RECT_5X50"
-                punch = "STRIKE"
-                step = None
-                if direction == "up":
-                    start_y += 21
-                elif direction == "down":
-                    start_y -= 25
-            
-            elif 32 < length < 50:
+
+
+            elif 32 < length < 80:
                 tool = "RECT_5X30"
                 punch = "NIBBLE"
                 step = 29
@@ -319,52 +196,23 @@ class Cassette:
                     else:
                         start_y -= 1
                         end_y -= 1
-            elif length == 55:
-                tool = "RECT_5X50"
-                punch = "NIBBLE"
-                step = 49
-                if start_x < 50:
-                    start_x += 1
-                    end_x
-                else:
-                    start_x
-                    end_x -= 1
-                
-            elif 55 < length:
+            else:
                 tool = "RECT_5X50" if self.thickness == 0.7 else "RECT_5X80"
                 punch = "NIBBLE"
                 step = 49 if tool == "RECT_5X50" else 79
-                if self.tape != "kzt":
-                    if direction == "right":
-                        start_x += 1
-                        end_x -= 1
-                    elif direction == "left":
-                        start_x -= 1
-                        end_x += 1
-                    elif direction == "up":
-                        start_y -= 1
-                        end_y += 1
-                    elif direction == "down":
-                        start_y += 1
-                        end_y -= 1
-                else:
-                    if direction == "right":
-                        start_x -= 1
-                        end_x += 1
-                    elif direction == "left":
-                        start_x += 1
-                        end_x -= 1
-                    elif direction == "up":
-                        start_y -= 1
-                        end_y += 1
-                    elif direction == "down":
-                        start_y += 1
-                        end_y -= 1
-            else:
-                tool = "RECT_3X10"
-                punch = "NIBBLE"
-                step = 8
-                
+                if direction == "right":
+                    start_x += 1
+                    end_x -= 1
+                elif direction == "left":
+                    start_x -= 1
+                    end_x += 1
+                elif direction == "up":
+                    start_y -= 1
+                    end_y += 1
+                elif direction == "down":
+                    start_y += 1
+                    end_y -= 1
+
             # Коррекция для NIBBLE — чтобы не вылазить за края
             if punch == "NIBBLE":
                 tool_length = TOOL_LENGTHS.get(tool, 0)
@@ -395,8 +243,6 @@ class Cassette:
             "y_end": end_y,
             "direction": direction
         }))
-    
-
 
     def adjust_punch(self, punch):
         tool_name = punch["tool"]
@@ -434,55 +280,25 @@ class Cassette:
     def _add(self, line):
         self.result.append(line)
 
-    def _draw_hole(self, center_x, center_y, vertical=False, paint_hole=False):
-        if paint_hole:
-            self._coord(center_x - 2, center_y, 9, True)
-            self._coord(center_x - 2, center_y, 0, True)
-            self._coord(center_x, center_y, -1, True)
-            self._coord(center_x - 2, center_y, 0, True)
-            self.tool_map.append({
-                "contour_punching": False,
-                "type_punching": "STRIKE",
-                "step": None,
-                "tool": "RND_4",  # круглая пробивка Ø4
-                "rotation": 0.0,
-                "x_start": center_x,
-                "y_start": center_y,
-                "x_end": None,
-                "y_end": None
-            })
-            return
+    def _draw_hole(self, center_x, center_y):
         # Размеры половинок (относительно центра)
         half_length = 2.5
         x1 = center_x - half_length
         x2 = center_x + half_length
         y1 = center_y - half_length
         y2 = center_y + half_length
-        if vertical:
-            # Вытянут по Y
-            self._coord(x1, y2, 9, True)
-            self._coord(x1, y2, 0, True)
-            self._coord(x1, y1, 0, True)
-            self._coord(center_x, y1, -1, True)
-            self._coord(x2, y1, 0, True)
-            self._coord(x2, y2, 0, True)
-            self._coord(center_x, y2, -1, True)
-            self._coord(x1, y2, 0, True)
 
-        else:
-            # Вытянут по X (как изначально)
-            self._coord(x1, y1, 9, True)
-            self._coord(x1, y1, 0, True)
-            self._coord(x2, y1, 0, True)
-            self._coord(x2, center_y, -1, True)
-            self._coord(x2, y2, 0, True)
-            self._coord(x1, y2, 0, True)
-            self._coord(x1, center_y, -1, True)
-            self._coord(x1, y1, 0, True)
-        if vertical:
-            rotation = 90.0
-        else:
-            rotation = 0.0
+        # Вытянут по X (как изначально)
+        self._coord(x1, y1, 9, True)
+        self._coord(x1, y1, 0, True)
+        self._coord(x2, y1, 0, True)
+        self._coord(x2, center_y, -1, True)
+        self._coord(x2, y2, 0, True)
+        self._coord(x1, y2, 0, True)
+        self._coord(x1, center_y, -1, True)
+        self._coord(x1, y1, 0, True)
+
+        rotation = 0.0
 
         self.tool_map.append({
         "contour_punching": False,
@@ -495,56 +311,6 @@ class Cassette:
         "x_end": None,
         "y_end": None
     })
-
-    def _bottom_block_kot(self):
-        x1 = round(0.0, 8)
-        x2 = round(self.rust - 1.5, 8)
-        x3 = round(self.depth + self.rust - 4.75, 8)
-        x4 = round(self.depth + self.rust - 3.75, 8)
-        x5 = round(self.length + self.depth + self.rust - 3.75, 8)
-        x6 = round(self.length + self.depth + self.rust - 4.75, 8)
-        x7 = round(self.length + (self.depth * 2) + self.rust - 6, 8)
-        x8 = round(self.length + ((self.depth + self.rust) * 2) - 7.5, 8)
-
-        y1 = round(self.depth - (self.rust / 2) + 16.15, 8)
-        y2 = round(self.width + self.depth + (self.rust / 2) + 16.35, 8)
-        y3 = round(self.width + self.depth + self.rust - 4.45, 8)
-        y4 = round(self.width + self.depth + self.rust - 3.45, 8)
-        y5 = round(self.width + ((self.depth + self.rust) * 2) - 7.5, 8)
-        y6 = round(self.depth + self.rust - 3.05, 8)
-        y7 = round(self.depth + self.rust - 4.05, 8)
-        y8 = round(0.0, 8)
-        
-        self._coord(x1, y1, 8)
-        self._coord(x1, y1, 0)
-        self._coord(x1, y2, 0)
-        self._coord(x2, y2, 0)
-        self._coord(x2, y3, 0)
-        self._coord(x3, y3, 0)
-        self._coord(x4, y3, -1)
-        self._coord(x4, y4, 0)
-        self._coord(x4, y5, 0)
-        self._coord(x5, y5, 0)
-        self._coord(x5, y4, 0)
-        self._coord(x5, y3, -1)
-        self._coord(x6, y3, 0)
-        self._coord(x7, y3, 0)
-        self._coord(x7, y2, 0)
-        self._coord(x8, y2, 0)
-        self._coord(x8, y1, 0)
-        self._coord(x7, y1, 0)
-        self._coord(x7, y6, 0)
-        self._coord(x6, y6, 0)
-        self._coord(x5, y6, -1)
-        self._coord(x5, y7, 0)
-        self._coord(x5, y8, 0)
-        self._coord(x4, y8, 0)
-        self._coord(x4, y7, 0)
-        self._coord(x4, y6, -1)
-        self._coord(x3, y6, 0)
-        self._coord(x2, y6, 0)
-        self._coord(x2, y1, 0)
-        self._coord(x1, y1, 0)
 
     def _bottom_block_kzt(self):
         x1 = round(0.0, 8)
@@ -720,83 +486,6 @@ class Cassette:
         self._add(f"QUANTITY {self.quantity}")
         self._add("CONTROLLER_INDEX 20")
 
-    def _hole_block_kot(self):
-        x1 = round(9, 8)
-        x2 = round(self.depth + self.rust + 6.25, 8)  
-        x3 = round(self.depth + self.rust + 66.25, 8)
-        x4 = round(self.length / 3 + self.depth + self.rust - 3.75, 8)
-        x5 = round(self.length / 2 + self.depth + self.rust - 3.75, 8)
-        x6 = round(self.length / 1.5 + self.depth + self.rust - 3.75, 8)
-        x7 = round(self.length - (self.depth + self.rust - 6.25), 8)
-        x8 = round(self.length + (self.depth + self.rust - 13.75), 8)
-        x9 = round(self.length + ((self.depth + self.rust) * 2) - 16.5, 8)
-
-        y1 = round(9, 8)
-        y2 = round(self.depth + self.rust - 14, 8)
-        y3 = round(self.depth + self.rust + 9.45, 8)
-        y4 = round(self.width / 3 + self.depth + self.rust - 3.75, 8)
-        y5 = round(self.width / 2 + self.depth + self.rust - 3.75, 8)
-        y6 = round(self.width / 1.5 + self.depth + self.rust - 3.75, 8)
-        y7 = round(self.width + (self.depth + self.rust - 16.95), 8)
-        y8 = round(self.width + ((self.depth + self.rust) * 2) - 16.5, 8)
-
-        if self.mounting == False:
-            x1 += 1
-            x2 += 5
-            x8 -= 5
-            x9 -= 1
-            y1 += 1
-            y3 += 5
-            y7 -= 5
-            y8 -= 1
-            
-        if self.tape != "kotvo":
-            #монтажные отверстия
-            self._draw_hole(x2, y1, paint_hole=not self.mounting)
-            self._draw_hole(x8, y1, paint_hole=not self.mounting)
-            self._draw_hole(x2, y8, paint_hole=not self.mounting)
-            self._draw_hole(x8, y8, paint_hole=not self.mounting)
-            if self.drainage:
-                #дренажные отверстия
-                self._draw_hole(x3, y2)
-                self._draw_hole(x7, y2)
-            if self.length > 1499 and self.mounting:
-                #монтажные отверстия
-                self._draw_hole(x4, y1)
-                self._draw_hole(x6, y1)
-                self._draw_hole(x4, y8)
-                self._draw_hole(x6, y8)
-                if self.drainage:
-                    #дренажные отверстия
-                    self._draw_hole(x5, y2)
-            elif self.length > 699 and self.mounting:
-                #монтажные отверстия
-                self._draw_hole(x5, y1)
-                self._draw_hole(x5, y8)
-        else:
-            #монтажные отверстия
-            self._draw_hole(x1, y3, vertical=True, paint_hole=not self.mounting)
-            self._draw_hole(x9, y3, vertical=True, paint_hole=not self.mounting)
-            self._draw_hole(x1, y7, vertical=True, paint_hole=not self.mounting)
-            self._draw_hole(x9, y7, vertical=True, paint_hole=not self.mounting)
-            if self.drainage:
-                #дренажные отверстия
-                self._draw_hole(x3, y2)
-                self._draw_hole(x7, y2)
-                if self.length > 1499:
-                    #дренажные отверстия
-                    self._draw_hole(x5, y2)
-            if self.width > 1499 and self.mounting:
-                #монтажные отверстия
-                self._draw_hole(x1, y4, vertical=True)
-                self._draw_hole(x9, y4, vertical=True)
-                self._draw_hole(x1, y6, vertical=True)
-                self._draw_hole(x9, y6, vertical=True)
-            elif self.width > 699 and self.mounting:
-                #монтажные отверстия
-                self._draw_hole(x1, y5, vertical=True)
-                self._draw_hole(x9, y5, vertical=True)
-
     def _hole_block_kzt(self):
         x1 = round(self.depth + 19.5, 8)
         x2 = round(self.depth + 81.5, 8)  
@@ -807,7 +496,7 @@ class Cassette:
         x7 = round(self.depth + (self.length / 1.5) + 10, 8)
 
         y1 = round(self.depth / 2 + 3, 8)
-        y2 = round(self.width + (self.depth * 2) + self.rust - 5.5, 8)
+        y2 = round(self.length + (self.depth * 2) + self.rust - 5.5, 8)
 
         #монтажные отверстия
         self._draw_hole(x1, y2)
@@ -833,20 +522,17 @@ class Cassette:
     def generate(self):
         self._add("DRAWING")
         self._add(f"{self.tape}_{self.length}x{self.width}_{self.quantity}")
-        if self.tape == "kzt":
-            self._hole_block_kzt()
-            self._bottom_block_kzt()
-        else:
-            self._hole_block_kot()
-            self._bottom_block_kot()
+
+        self._hole_block()
+        self._bottom_block()
         self._postprocessing_block()
         self._tool_block()
         #print(self.tool_map)
-        print(self.lengths)
+        #print(self.lengths)
 
         return "\n".join(self.result)
 
 
 if __name__ == "__main__":
-    example = Cassette("kzt", 1180, 580, "Zink", "1.0", 10)
+    example = KZTCassette("kzt", 400, 880, "Zink", "1.0", 10, 20.0, 20.0)
     print(example.generate())
