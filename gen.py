@@ -554,12 +554,20 @@ class Cassette:
         x6 = round(self.length + self.depth + self.rust - 4.75, 8)
         x7 = round(self.length + (self.depth * 2) + self.rust - 6, 8)
         x8 = round(self.length + ((self.depth + self.rust) * 2) - 7.5, 8)
-        xu1 = round(self.length_left + self.depth + self.rust - 24.58980704, 8)
-        xu2 = round(self.length_left + self.depth + self.rust - 5.42236681, 8)
-        xu3 = round(self.length_left + self.depth + self.rust - 4.75, 8)
-        xu4 = round(self.length_left + self.depth + self.rust - 4.07763319, 8)
-        xu5 = round(self.length_left + self.depth + self.rust + 15.08980704, 8)
+        if self.tape == "ukot" or self.tape == "ukotvo":
+            xu1 = round(self.length_left + self.depth + self.rust - 24.58980704, 8)
+            xu2 = round(self.length_left + self.depth + self.rust - 5.42236681, 8)
+            xu3 = round(self.length_left + self.depth + self.rust - 4.75, 8)
+            xu4 = round(self.length_left + self.depth + self.rust - 4.07763319, 8)
+            xu5 = round(self.length_left + self.depth + self.rust + 15.08980704, 8)
         
+            yu1 = round(self.rust -2, 8)
+            yu2 = round(self.depth + self.rust - 3.49021813, 8)
+            yu3 = round(self.depth + self.rust - 2.75, 8)
+            yu4 = round(self.width + self.depth + self.rust - 4.75, 8)
+            yu5 = round(self.width + self.depth + self.rust - 4.00978187, 8)
+            yu6 = round(self.width + (self.depth * 2) + self.rust - 5.5, 8)
+
         y1 = round(self.depth - (self.rust / 2) + 16.15, 8)
         y2 = round(self.width + self.depth + (self.rust / 2) + 16.35, 8)
         y3 = round(self.width + self.depth + self.rust - 4.45, 8)
@@ -568,12 +576,6 @@ class Cassette:
         y6 = round(self.depth + self.rust - 3.05, 8)
         y7 = round(self.depth + self.rust - 4.05, 8)
         y8 = round(0.0, 8)
-        yu1 = round(self.rust -2, 8)
-        yu2 = round(self.depth + self.rust - 3.49021813, 8)
-        yu3 = round(self.depth + self.rust - 2.75, 8)
-        yu4 = round(self.width + self.depth + self.rust - 4.75, 8)
-        yu5 = round(self.width + self.depth + self.rust - 4.00978187, 8)
-        yu6 = round(self.width + (self.depth * 2) + self.rust - 5.5, 8)
         
         self._coord(x1, y1, 8)
         self._coord(x1, y1, 0)
@@ -820,6 +822,13 @@ class Cassette:
         x7 = round(self.length - (self.depth + self.rust - 6.25), 8)
         x8 = round(self.length + (self.depth + self.rust - 13.75), 8)
         x9 = round(self.length + ((self.depth + self.rust) * 2) - 16.5, 8)
+        if self.tape == "ukot":
+            xu1 = round(self.length_left / 3 + self.depth + self.rust - 3.75, 8)
+            xu2= round(self.length_left / 2 + self.depth + self.rust - 3.75, 8)
+            xu3 = round(self.length_left /1.5 + self.depth + self.rust - 3.75, 8)
+            xu4 = round(self.length_left + (self.length_right / 3) + self.depth + self.rust - 3.75, 8)
+            xu5 = round(self.length_left + (self.length_right / 2) + self.depth + self.rust - 3.75, 8)
+            xu6 = round(self.length_left + (self.length_right / 1.5) + self.depth + self.rust - 3.75, 8)
 
         y1 = round(9, 8)
         y2 = round(self.depth + self.rust - 14, 8)
@@ -850,19 +859,42 @@ class Cassette:
                 #дренажные отверстия
                 self._draw_hole(x3, y2)
                 self._draw_hole(x7, y2)
-            if self.length > 1499 and self.mounting:
-                #монтажные отверстия
-                self._draw_hole(x4, y1)
-                self._draw_hole(x6, y1)
-                self._draw_hole(x4, y8)
-                self._draw_hole(x6, y8)
-                if self.drainage:
-                    #дренажные отверстия
-                    self._draw_hole(x5, y2)
-            elif self.length > 699 and self.mounting:
-                #монтажные отверстия
-                self._draw_hole(x5, y1)
-                self._draw_hole(x5, y8)
+            if self.tape != "ukot":
+                if self.length > 1499 and self.mounting:
+                    #монтажные отверстия
+                    self._draw_hole(x4, y1)
+                    self._draw_hole(x6, y1)
+                    self._draw_hole(x4, y8)
+                    self._draw_hole(x6, y8)
+                    if self.drainage:
+                        #дренажные отверстия
+                        self._draw_hole(x5, y2)
+
+                elif self.length > 699 and self.mounting:
+                    #монтажные отверстия
+                    self._draw_hole(x5, y1)
+                    self._draw_hole(x5, y8)
+            else:
+                if self.length_left > 1499 and self.mounting:
+                    #монтажные отверстия
+                    self._draw_hole(xu1, y1)
+                    self._draw_hole(xu3, y1)
+                    self._draw_hole(xu1, y8)
+                    self._draw_hole(xu3, y8)
+                elif self.length_left > 699 and self.mounting:
+                    #монтажные отверстия
+                    self._draw_hole(xu2, y1)
+                    self._draw_hole(xu2, y8)
+                if self.length_right > 1499 and self.mounting:
+                    #монтажные отверстия
+                    self._draw_hole(xu4, y1)
+                    self._draw_hole(xu6, y1)
+                    self._draw_hole(xu4, y8)
+                    self._draw_hole(xu6, y8)
+                elif self.length_right > 699 and self.mounting:
+                    #монтажные отверстия
+                    self._draw_hole(xu5, y1)
+                    self._draw_hole(xu5, y8)
         else:
             #монтажные отверстия
             self._draw_hole(x1, y3, vertical=True, paint_hole=not self.mounting)

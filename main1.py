@@ -84,44 +84,81 @@ class CreateCPFile:
         success = []
         errors = []
 
-
         try:
-            df = pd.read_excel(file_path)
-            if self.type_var.get() != "ukot" or self.type_var.get() != "ukotvo":
-                # Ожидаем столбцы: Ширина, Высота, Количество
-                for index, row in df.iterrows():
+            df = pd.read_excel(file_path, engine='openpyxl')
+
+            for index, row in df.iterrows():
+                try:
                     width = int(row["высота"])
-                    length = int(row["ширина"])
+                    length_left = int(row["ширина"])
                     quantity = int(row["количество"])
 
-                    if not (100 <= width <= 3000) or not (100 <= length <= 3000):
-                        errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
-                        continue
+                    length_right = row.get("ширина2")
 
-                    try:
+                    if not (pd.isna(length_right) or str(length_right).strip() == ""):
+                        # Угловая кассета
+                        length_right = int(length_right)
+                        length = length_left + length_right - 2
+
+                        if not (100 <= width <= 3000) or not (50 <= length_left) or not (50 <= length_right) or not (98 <= length <= 3000):
+                            errors.append(f"ukot_{width}x{length_left}x{length_right}_{quantity}")
+                            continue
+
+                        # Меняем "kot" → "ukot", "kotvo" → "ukotvo"
+                        tape_type = self.type_var.get().replace("kotvo", "ukotvo").replace("kot", "ukot")
+
+                        cassette = Cassette(
+                            tape=tape_type,
+                            length=length,
+                            width=width,
+                            stamp="Zink",
+                            thickness=float(self.thickness_var.get()),
+                            quantity=quantity,
+                            drainage=False,
+                            mounting=self.mounting_var.get(),
+                            depth=int(self.depth_var.get()),
+                            rust=int(self.rust_var.get()),
+                            length_left=length_left,
+                            length_right=length_right
+                        )
+
+                        filename = f"{cassette.tape}_{width}x{length_left}x{length_right}_{quantity}.cp"
+
+                    else:
+                        # Прямая кассета
+                        length = length_left
+
+                        if not (100 <= width <= 3000) or not (100 <= length <= 3000):
+                            errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
+                            continue
+
                         cassette = Cassette(
                             tape=self.type_var.get(),
                             length=length,
                             width=width,
-                            stamp="Zink",  # заглушка — можно будет доработать
+                            stamp="Zink",
                             thickness=float(self.thickness_var.get()),
-                            quantity=int(quantity),
+                            quantity=quantity,
                             drainage=self.drainage_var.get(),
                             mounting=self.mounting_var.get(),
                             depth=int(self.depth_var.get()),
                             rust=int(self.rust_var.get())
                         )
 
-                        cp_text = cassette_generate_cp(cassette)
                         filename = f"{cassette.tape}_{width}x{length}_{quantity}.cp"
-                        filepath = os.path.join(save_folder, filename)
 
-                        with open(filepath, "w", encoding="utf-8") as f:
-                            f.write(cp_text)
-                        success.append(filename)
+                    # Сохраняем CP-файл
+                    filepath = os.path.join(save_folder, filename)
+                    cp_text = cassette_generate_cp(cassette)
 
-                    except Exception as e:
-                        errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
+                    with open(filepath, "w", encoding="utf-8") as f:
+                        f.write(cp_text)
+
+                    success.append(filename)
+
+                except Exception as e:
+                    errors.append(f"Ошибка в строке {index+2}: {e}")  # +2 потому что Excel считает с 1 и есть заголовок
+
             self.show_results(success, errors)
 
         except Exception as e:
