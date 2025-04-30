@@ -5,7 +5,7 @@ from tkinter import filedialog, messagebox, ttk
 import pandas as pd
 import os
 import sys
-from gen_kzt import KOTCassette
+from gen import Cassette
 
 # Старые функции create_cp_kzt_701 и им подобные НЕ трогаем, оставляем!
 
@@ -94,15 +94,15 @@ class CreateCPFile:
                 quantity = int(row["количество"])
 
                 if not (100 <= width <= 3000) or not (100 <= length <= 3000):
-                    errors.append(f"{self.type_var.get()}_{length}x{width}_{quantity}")
+                    errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
                     continue
 
                 try:
-                    cassette = KOTCassette(
+                    cassette = Cassette(
                         tape=self.type_var.get(),
                         length=length,
                         width=width,
-                        stamp="Zinc",  # заглушка — можно будет доработать
+                        stamp="Zink",  # заглушка — можно будет доработать
                         thickness=float(self.thickness_var.get()),
                         quantity=int(quantity),
                         drainage=self.drainage_var.get(),
@@ -112,7 +112,7 @@ class CreateCPFile:
                     )
 
                     cp_text = cassette_generate_cp(cassette)
-                    filename = f"{cassette.tape}_{length}x{width}_{quantity}.cp"
+                    filename = f"{cassette.tape}_{width}x{length}_{quantity}.cp"
                     filepath = os.path.join(save_folder, filename)
 
                     with open(filepath, "w", encoding="utf-8") as f:
@@ -120,7 +120,7 @@ class CreateCPFile:
                     success.append(filename)
 
                 except Exception as e:
-                    errors.append(f"{self.type_var.get()}_{length}x{width}_{quantity}")
+                    errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
             self.show_results(success, errors)
 
         except Exception as e:

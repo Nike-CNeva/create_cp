@@ -569,6 +569,11 @@ class Cassette:
         x20 = round(self.length + (self.depth * 2) + 5.82, 8)
         x21 = round(self.length + (self.depth * 2) + 7, 8)
         x22 = round(self.length + (self.depth * 2) + 20, 8)
+        x23 = round(self.length / 3 + self.depth - 2.5, 8)
+        x24 = round(self.length / 3 + self.depth + 22.5, 8)
+        x25 = round(self.length / 1.5 + self.depth - 2.5, 8)
+        x26 = round(self.length / 1.5 + self.depth + 22.5, 8)
+        
 
         y1 = round(0.0, 8)
         y2 = round(8.0, 8)
@@ -602,6 +607,15 @@ class Cassette:
             self._coord(x11, y13, 0)
             self._coord(x12, y13, 0)
             self._coord(x12, y14, 0)
+        elif self.length > 1499:
+            self._coord(x23, y14, 0)
+            self._coord(x23, y13, 0)
+            self._coord(x24, y13, 0)
+            self._coord(x24, y14, 0)
+            self._coord(x25, y14, 0)
+            self._coord(x25, y13, 0)
+            self._coord(x26, y13, 0)
+            self._coord(x26, y14, 0)
         self._coord(x14, y14, 0)
         self._coord(x14, y13, 0)
         self._coord(x15, y13, 0)
@@ -842,11 +856,11 @@ class Cassette:
         self._postprocessing_block()
         self._tool_block()
         #print(self.tool_map)
-        print(self.lengths)
+        #print(self.lengths)
 
         return "\n".join(self.result)
 
 
-if __name__ == "__main__":
-    example = Cassette("kzt", 1180, 580, "Zink", "1.0", 10)
-    print(example.generate())
+#if __name__ == "__main__":
+#    example = Cassette("kzt", 1180, 580, "Zink", "1.0", 10)
+#    print(example.generate())
