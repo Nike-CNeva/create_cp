@@ -15,9 +15,12 @@ TOOL_LENGTHS = {
 }
 
 class Cassette:
-    def __init__(self, tape, length, width, stamp, thickness, quantity, drainage=True, mounting=True, depth=20.0, rust=20.0):
+    def __init__(self, tape, length, width, stamp, thickness, quantity, drainage=True, mounting=True, depth=20.0, rust=20.0, length_left=None, length_right=None, length_center = None):
         self.tape = tape
         self.length = length
+        self.length_left = length_left
+        self.length_right = length_right
+        self.length_center = length_center
         self.width = width
         self.depth = depth  # глубина кассеты
         self.rust = rust    # ширина руста
@@ -159,7 +162,53 @@ class Cassette:
 
                 elif direction == "down":
                     start_y -= 4
-
+            
+            elif length == 18.0:
+                tool = "RECT_3X10"
+                punch = "NIBBLE"
+                step = 8
+                if start_y > 25:
+                    if direction == "up":
+                        end_y -= 1
+                    elif direction == "down":
+                        start_y -= 1
+                else:
+                    if direction == "up":
+                        start_y += 1
+                    elif direction == "down":
+                        end_y += 1
+            
+            elif 26.64 < length < 26.65:
+                tool = "RECT_3X10"
+                punch = "NIBBLE"
+                step = 8
+                if direction == "left":
+                    if start_x < self.length_left + self.depth + self.rust - 4.75:
+                        start_x += 3.16462835
+                        end_x -= 0.36131344
+                        start_y += 2.35764318
+                        end_y -= 3.89428215
+                        orientation = 136
+                    else:
+                        start_x += 0.36131344
+                        end_x -= 3.16462835
+                        start_y -= 3.89428215
+                        end_y += 2.35764318
+                        orientation = 44
+                elif direction == "right":
+                    if start_x < self.length_left + self.depth + self.rust - 4.75:
+                        start_x -= 0.36131344
+                        end_x += 3.16462835
+                        start_y += 3.89428215
+                        end_y -= 2.35764318
+                        orientation = 44
+                    else:
+                        start_x -= 3.16462835
+                        end_x += 0.36131344
+                        start_y -= 2.35764318
+                        end_y += 3.89428215
+                        orientation = 136
+                
             elif length == 13.0:
                 tool = "RECT_3X10"
                 punch = "NIBBLE"
@@ -505,7 +554,12 @@ class Cassette:
         x6 = round(self.length + self.depth + self.rust - 4.75, 8)
         x7 = round(self.length + (self.depth * 2) + self.rust - 6, 8)
         x8 = round(self.length + ((self.depth + self.rust) * 2) - 7.5, 8)
-
+        xu1 = round(self.length_left + self.depth + self.rust - 24.58980704, 8)
+        xu2 = round(self.length_left + self.depth + self.rust - 5.42236681, 8)
+        xu3 = round(self.length_left + self.depth + self.rust - 4.75, 8)
+        xu4 = round(self.length_left + self.depth + self.rust - 4.07763319, 8)
+        xu5 = round(self.length_left + self.depth + self.rust + 15.08980704, 8)
+        
         y1 = round(self.depth - (self.rust / 2) + 16.15, 8)
         y2 = round(self.width + self.depth + (self.rust / 2) + 16.35, 8)
         y3 = round(self.width + self.depth + self.rust - 4.45, 8)
@@ -514,6 +568,12 @@ class Cassette:
         y6 = round(self.depth + self.rust - 3.05, 8)
         y7 = round(self.depth + self.rust - 4.05, 8)
         y8 = round(0.0, 8)
+        yu1 = round(self.rust -2, 8)
+        yu2 = round(self.depth + self.rust - 3.49021813, 8)
+        yu3 = round(self.depth + self.rust - 2.75, 8)
+        yu4 = round(self.width + self.depth + self.rust - 4.75, 8)
+        yu5 = round(self.width + self.depth + self.rust - 4.00978187, 8)
+        yu6 = round(self.width + (self.depth * 2) + self.rust - 5.5, 8)
         
         self._coord(x1, y1, 8)
         self._coord(x1, y1, 0)
@@ -524,6 +584,14 @@ class Cassette:
         self._coord(x4, y3, -1)
         self._coord(x4, y4, 0)
         self._coord(x4, y5, 0)
+        if self.tape == "ukot" or self.tape == "ukotvo":
+            self._coord(xu1, y5, 0)
+            self._coord(xu1, yu6, 0)
+            self._coord(xu2, yu5, 0)
+            self._coord(xu3, yu4, -1)
+            self._coord(xu4, yu5, 0)
+            self._coord(xu5, yu6, 0)
+            self._coord(xu5, y5, 0)
         self._coord(x5, y5, 0)
         self._coord(x5, y4, 0)
         self._coord(x5, y3, -1)
@@ -538,6 +606,14 @@ class Cassette:
         self._coord(x5, y6, -1)
         self._coord(x5, y7, 0)
         self._coord(x5, y8, 0)
+        if self.tape == "ukot" or self.tape == "ukotvo":
+            self._coord(xu5, y8, 0)
+            self._coord(xu5, yu1, 0)
+            self._coord(xu4, yu2, 0)
+            self._coord(xu3, yu3, -1)
+            self._coord(xu2, yu2, 0)
+            self._coord(xu1, yu1, 0)
+            self._coord(xu1, y8, 0)
         self._coord(x4, y8, 0)
         self._coord(x4, y7, 0)
         self._coord(x4, y6, -1)
@@ -602,12 +678,7 @@ class Cassette:
         self._coord(x8, y13, 0)
         self._coord(x9, y13, 0)
         self._coord(x9, y14, 0)
-        if self.length > 699:
-            self._coord(x11, y14, 0)
-            self._coord(x11, y13, 0)
-            self._coord(x12, y13, 0)
-            self._coord(x12, y14, 0)
-        elif self.length > 1499:
+        if self.length > 1499:
             self._coord(x23, y14, 0)
             self._coord(x23, y13, 0)
             self._coord(x24, y13, 0)
@@ -616,6 +687,11 @@ class Cassette:
             self._coord(x25, y13, 0)
             self._coord(x26, y13, 0)
             self._coord(x26, y14, 0)
+        elif self.length > 699:
+            self._coord(x11, y14, 0)
+            self._coord(x11, y13, 0)
+            self._coord(x12, y13, 0)
+            self._coord(x12, y14, 0)
         self._coord(x14, y14, 0)
         self._coord(x14, y13, 0)
         self._coord(x15, y13, 0)
@@ -856,11 +932,11 @@ class Cassette:
         self._postprocessing_block()
         self._tool_block()
         #print(self.tool_map)
-        #print(self.lengths)
+        print(self.lengths)
 
         return "\n".join(self.result)
 
 
-#if __name__ == "__main__":
-#    example = Cassette("kzt", 1180, 580, "Zink", "1.0", 10)
-#    print(example.generate())
+if __name__ == "__main__":
+    example = Cassette("ukot", 698, 580, "Zink", "1.0", 10, False, True, 20, 20, 300, 400)
+    print(example.generate())

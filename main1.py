@@ -87,40 +87,41 @@ class CreateCPFile:
 
         try:
             df = pd.read_excel(file_path)
-            # Ожидаем столбцы: Ширина, Высота, Количество
-            for index, row in df.iterrows():
-                width = int(row["высота"])
-                length = int(row["ширина"])
-                quantity = int(row["количество"])
+            if self.type_var.get() != "ukot" or self.type_var.get() != "ukotvo":
+                # Ожидаем столбцы: Ширина, Высота, Количество
+                for index, row in df.iterrows():
+                    width = int(row["высота"])
+                    length = int(row["ширина"])
+                    quantity = int(row["количество"])
 
-                if not (100 <= width <= 3000) or not (100 <= length <= 3000):
-                    errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
-                    continue
+                    if not (100 <= width <= 3000) or not (100 <= length <= 3000):
+                        errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
+                        continue
 
-                try:
-                    cassette = Cassette(
-                        tape=self.type_var.get(),
-                        length=length,
-                        width=width,
-                        stamp="Zink",  # заглушка — можно будет доработать
-                        thickness=float(self.thickness_var.get()),
-                        quantity=int(quantity),
-                        drainage=self.drainage_var.get(),
-                        mounting=self.mounting_var.get(),
-                        depth=int(self.depth_var.get()),
-                        rust=int(self.rust_var.get())
-                    )
+                    try:
+                        cassette = Cassette(
+                            tape=self.type_var.get(),
+                            length=length,
+                            width=width,
+                            stamp="Zink",  # заглушка — можно будет доработать
+                            thickness=float(self.thickness_var.get()),
+                            quantity=int(quantity),
+                            drainage=self.drainage_var.get(),
+                            mounting=self.mounting_var.get(),
+                            depth=int(self.depth_var.get()),
+                            rust=int(self.rust_var.get())
+                        )
 
-                    cp_text = cassette_generate_cp(cassette)
-                    filename = f"{cassette.tape}_{width}x{length}_{quantity}.cp"
-                    filepath = os.path.join(save_folder, filename)
+                        cp_text = cassette_generate_cp(cassette)
+                        filename = f"{cassette.tape}_{width}x{length}_{quantity}.cp"
+                        filepath = os.path.join(save_folder, filename)
 
-                    with open(filepath, "w", encoding="utf-8") as f:
-                        f.write(cp_text)
-                    success.append(filename)
+                        with open(filepath, "w", encoding="utf-8") as f:
+                            f.write(cp_text)
+                        success.append(filename)
 
-                except Exception as e:
-                    errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
+                    except Exception as e:
+                        errors.append(f"{self.type_var.get()}_{width}x{length}_{quantity}")
             self.show_results(success, errors)
 
         except Exception as e:
