@@ -14,7 +14,7 @@ class CreateCPFile:
         self.window = tk.Tk()
         self.window.title("Создание файлов заготовок кассет v2.0")
         window_width = 400
-        window_height = 300
+        window_height = 250
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
         x = (screen_width // 2) - (window_width // 2)
@@ -32,6 +32,9 @@ class CreateCPFile:
 
         self.exit_button = tk.Button(self.window, text="Выход", width=40, height=2, command=self.exit_program)
         self.exit_button.pack(pady=5)
+
+        ps = tk.Label(self.window, text="Необходимые поля в таблице Exel: высота, ширина, ширина2, количество")
+        ps.pack(pady=20)
 
         self.window.mainloop()
 

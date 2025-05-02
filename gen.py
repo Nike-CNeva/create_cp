@@ -964,11 +964,11 @@ class Cassette:
         self._postprocessing_block()
         self._tool_block()
         #print(self.tool_map)
-        print(self.lengths)
+        #print(self.lengths)
 
         return "\n".join(self.result)
 
 
-if __name__ == "__main__":
-    example = Cassette("ukot", 698, 580, "Zink", "1.0", 10, False, True, 20, 20, 300, 400)
-    print(example.generate())
+#if __name__ == "__main__":
+#    example = Cassette("ukot", 698, 580, "Zink", "1.0", 10, False, True, 20, 20, 300, 400)
+#    print(example.generate())
