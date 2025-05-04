@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 import pandas as pd
 import os
-import sys
 from gen import Cassette
 
 # Старые функции create_cp_kzt_701 и им подобные НЕ трогаем, оставляем!
