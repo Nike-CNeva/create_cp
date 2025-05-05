@@ -11,8 +11,8 @@ from gen import Cassette
 class CreateCPFile:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.title("Создание файлов заготовок кассет v2.0")
-        window_width = 400
+        self.window.title("Создание файлов заготовок кассет v2.1")
+        window_width = 410
         window_height = 250
         screen_width = self.window.winfo_screenwidth()
         screen_height = self.window.winfo_screenheight()
@@ -33,7 +33,7 @@ class CreateCPFile:
         self.exit_button.pack(pady=5)
 
         ps = tk.Label(self.window, text="Необходимые поля в таблице Exel: высота, ширина, ширина2, количество")
-        ps.pack(pady=20)
+        ps.pack(pady=15)
 
         self.window.mainloop()
 
