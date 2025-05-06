@@ -247,10 +247,12 @@ class Cassette:
                 punch = "NIBBLE"
                 step = 8
                 if start_x < 60:
+                    start_x -= 1
                     end_x += 1
                 else:
                     start_x -= 1
-
+                    end_x += 1
+            
                 
             elif length == 21.0:
                 tool = "TRIANGLE4"
@@ -945,12 +947,15 @@ class Cassette:
             self._draw_hole(x7, y2)
 
             #дренажные отверстия
-            self._draw_hole(x3, y1)
+            self._draw_hole(x6, y1)
+            self._draw_hole(x7, y1)
             
         elif self.length > 699:
             #монтажные отверстия
             self._draw_hole(x3, y2)
 
+            #дренажные отверстия
+            self._draw_hole(x3, y1)
 
     def generate(self):
         self._add("DRAWING")
