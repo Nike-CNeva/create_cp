@@ -15,8 +15,9 @@ TOOL_LENGTHS = {
 }
 
 class Cassette:
-    def __init__(self, tape, length, width, stamp, thickness, quantity, drainage=True, mounting=True, depth=20.0, rust=20.0, length_left=None, length_right=None, length_center = None):
+    def __init__(self, tape, length, width, stamp, thickness, quantity, drainage=True, mounting=True, depth=20.0, rust=20.0, length_left=None, length_right=None, length_center = None, angular=False):
         self.tape = tape
+        self.angular = angular
         self.length = length
         self.length_left = length_left
         self.length_right = length_right
@@ -129,7 +130,7 @@ class Cassette:
                     if start_x < 50:
                         start_x += 9
                     else:
-                        start_x += 8
+                        start_x += 10
                 elif direction == "left":
                     if start_x < 50:
                         start_x -= 8
@@ -384,7 +385,7 @@ class Cassette:
             elif 55 < length:
                 tool = "RECT_5X50" if self.thickness == 0.7 else "RECT_5X80"
                 punch = "NIBBLE"
-                step = 49 if tool == "RECT_5X50" else 79
+                step = 49.2 if tool == "RECT_5X50" else 79.2
                 if self.tape != "kzt":
                     if direction == "right":
                         start_x += 1
@@ -556,7 +557,7 @@ class Cassette:
         x6 = round(self.length + self.depth + self.rust - 4.75, 8)
         x7 = round(self.length + (self.depth * 2) + self.rust - 6, 8)
         x8 = round(self.length + ((self.depth + self.rust) * 2) - 7.5, 8)
-        if self.tape == "ukot" or self.tape == "ukotvo":
+        if self.angular:
             xu1 = round(self.length_left + self.depth + self.rust - 24.58980704, 8)
             xu2 = round(self.length_left + self.depth + self.rust - 5.42236681, 8)
             xu3 = round(self.length_left + self.depth + self.rust - 4.75, 8)
@@ -588,7 +589,7 @@ class Cassette:
         self._coord(x4, y3, -1)
         self._coord(x4, y4, 0)
         self._coord(x4, y5, 0)
-        if self.tape == "ukot" or self.tape == "ukotvo":
+        if self.angular:
             self._coord(xu1, y5, 0)
             self._coord(xu1, yu6, 0)
             self._coord(xu2, yu5, 0)
@@ -610,7 +611,7 @@ class Cassette:
         self._coord(x5, y6, -1)
         self._coord(x5, y7, 0)
         self._coord(x5, y8, 0)
-        if self.tape == "ukot" or self.tape == "ukotvo":
+        if self.angular:
             self._coord(xu5, y8, 0)
             self._coord(xu5, yu1, 0)
             self._coord(xu4, yu2, 0)
@@ -824,7 +825,7 @@ class Cassette:
         x7 = round(self.length - (self.depth + self.rust - 6.25), 8)
         x8 = round(self.length + (self.depth + self.rust - 13.75), 8)
         x9 = round(self.length + ((self.depth + self.rust) * 2) - 16.5, 8)
-        if self.tape == "ukot":
+        if self.angular:
             xu1 = round(self.length_left / 3 + self.depth + self.rust - 3.75, 8)
             xu2= round(self.length_left / 2 + self.depth + self.rust - 3.75, 8)
             xu3 = round(self.length_left /1.5 + self.depth + self.rust - 3.75, 8)
@@ -858,10 +859,15 @@ class Cassette:
             self._draw_hole(x2, y8, paint_hole=not self.mounting)
             self._draw_hole(x8, y8, paint_hole=not self.mounting)
             if self.drainage:
-                #дренажные отверстия
-                self._draw_hole(x3, y2)
-                self._draw_hole(x7, y2)
-            if self.tape != "ukot":
+                if self.length > 169:
+                    #дренажные отверстия
+                    self._draw_hole(x3, y2)
+                    self._draw_hole(x7, y2)
+                else:
+                    #дренажные отверстия
+                    self._draw_hole(x5, y2)
+
+            if not self.angular:
                 if self.length > 1499 and self.mounting:
                     #монтажные отверстия
                     self._draw_hole(x4, y1)
@@ -904,9 +910,12 @@ class Cassette:
             self._draw_hole(x1, y7, vertical=True, paint_hole=not self.mounting)
             self._draw_hole(x9, y7, vertical=True, paint_hole=not self.mounting)
             if self.drainage:
-                #дренажные отверстия
-                self._draw_hole(x3, y2)
-                self._draw_hole(x7, y2)
+                if self.length > 169:
+                    #дренажные отверстия
+                    self._draw_hole(x3, y2)
+                    self._draw_hole(x7, y2)
+                else:
+                    self._draw_hole(x5, y2)
                 if self.length > 1499:
                     #дренажные отверстия
                     self._draw_hole(x5, y2)
@@ -975,5 +984,5 @@ class Cassette:
 
 
 #if __name__ == "__main__":
-#    example = Cassette("ukot", 698, 580, "Zink", "1.0", 10, False, True, 20, 20, 300, 400)
+#    example = Cassette("kot", 700, 580, "Zink", "1.0", 10)
 #    print(example.generate())

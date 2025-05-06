@@ -103,14 +103,12 @@ class CreateCPFile:
                         length = length_left + length_right - 2
 
                         if not (100 <= width <= 3000) or not (50 <= length_left) or not (50 <= length_right) or not (98 <= length <= 3000):
-                            errors.append(f"ukot_{width}x{length_left}x{length_right}_{quantity}")
+                            errors.append(f"{self.type_var.get()}_{width}x{length_left}x{length_right}_{quantity}")
                             continue
 
-                        # Меняем "kot" → "ukot", "kotvo" → "ukotvo"
-                        tape_type = self.type_var.get().replace("kotvo", "ukotvo").replace("kot", "ukot")
 
                         cassette = Cassette(
-                            tape=tape_type,
+                            tape=self.type_var.get(),
                             length=length,
                             width=width,
                             stamp="Zink",
@@ -121,7 +119,8 @@ class CreateCPFile:
                             depth=int(self.depth_var.get()),
                             rust=int(self.rust_var.get()),
                             length_left=length_left,
-                            length_right=length_right
+                            length_right=length_right,
+                            angular=True
                         )
 
                         filename = f"{cassette.tape}_{width}x{length_left}x{length_right}_{quantity}.cp"
