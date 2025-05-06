@@ -137,7 +137,7 @@ class Cassette:
                     else:
                         start_x -= 9
             
-            elif length == 9 or length == 8:
+            elif length == 9 or length == 8 or length == 7.5:
                 tool = "RECT_3X10"
                 punch = "STRIKE"
                 step = None
@@ -149,8 +149,10 @@ class Cassette:
                         start_y -= 4
                 else:
                     if direction == "up":
-                        start_y += 3
-
+                        if not self.angular:
+                            start_y += 3
+                        else:
+                            start_y += 2.5
                     elif direction == "down":
                         start_y -= 5
 
@@ -654,7 +656,28 @@ class Cassette:
         x24 = round(self.length / 3 + self.depth + 22.5, 8)
         x25 = round(self.length / 1.5 + self.depth - 2.5, 8)
         x26 = round(self.length / 1.5 + self.depth + 22.5, 8)
-        
+        if self.angular:
+            xu1 = round(self.length_left + self.depth - 10.98339302, 8)
+            xu2 = round(self.length_left + self.depth - 3.91230526, 8)
+            xu3 = round(self.length_left + self.depth + 8, 8)
+            xu4 = round(self.length_left + self.depth + 8.32757322, 8)
+            xu5 = round(self.length_left + self.depth + 9, 8)
+            xu6 = round(self.length_left + self.depth + 9.67230684, 8)
+            xu7 = round(self.length_left + self.depth + 10, 8)
+            xu8 = round(self.length_left + self.depth + 21.91230526, 8)
+            xu9 = round(self.length_left + self.depth + 28.98339302, 8)
+            xu10 = round(self.length_left / 2 + self.depth - 2.5, 8)
+            xu11 = round(self.length_left / 2 + self.depth + 22.5, 8)
+            xu12 = round(self.length_left / 3 + self.depth - 2.5, 8)
+            xu13 = round(self.length_left / 3 + self.depth + 22.5, 8)
+            xu14 = round(self.length_left / 1.5 + self.depth - 2.5, 8)
+            xu15 = round(self.length_left / 1.5 + self.depth + 22.5, 8)
+            xu16 = round(self.length_left + (self.length_right / 2) + self.depth - 4.5, 8)
+            xu17 = round(self.length_left + (self.length_right / 2) + self.depth + 20.5, 8)
+            xu18 = round(self.length_left + (self.length_right / 3) + self.depth - 4.5, 8)
+            xu19 = round(self.length_left + (self.length_right / 3) + self.depth + 20.5, 8)
+            xu20 = round(self.length_left + (self.length_right / 1.5) + self.depth - 4.5, 8)
+            xu21 = round(self.length_left + (self.length_right / 1.5) + self.depth + 20.5, 8)
 
         y1 = round(0.0, 8)
         y2 = round(8.0, 8)
@@ -670,6 +693,11 @@ class Cassette:
         y12 = round(self.width + (self.depth * 2) + 2.5, 8)
         y13 = round(self.width + (self.depth * 2) + self.rust + 14, 8)
         y14 = round(self.width + (self.depth * 2) + self.rust + 23, 8)
+        if self.angular:
+            yu1 = round(7.5, 8)
+            yu2 = round(self.depth + 0.5, 8)
+            yu3 = round(self.depth + self.width + 1.24016365, 8)
+ 
         
         self._coord(x1, y7, 8)
         self._coord(x1, y7, 0)
@@ -683,20 +711,57 @@ class Cassette:
         self._coord(x8, y13, 0)
         self._coord(x9, y13, 0)
         self._coord(x9, y14, 0)
-        if self.length > 1499:
-            self._coord(x23, y14, 0)
-            self._coord(x23, y13, 0)
-            self._coord(x24, y13, 0)
-            self._coord(x24, y14, 0)
-            self._coord(x25, y14, 0)
-            self._coord(x25, y13, 0)
-            self._coord(x26, y13, 0)
-            self._coord(x26, y14, 0)
-        elif self.length > 699:
-            self._coord(x11, y14, 0)
-            self._coord(x11, y13, 0)
-            self._coord(x12, y13, 0)
-            self._coord(x12, y14, 0)
+        if self.angular:
+            if self.length_left > 1499:
+                self._coord(xu12, y14, 0)
+                self._coord(xu12, y13, 0)
+                self._coord(xu13, y13, 0)
+                self._coord(xu13, y14, 0)
+                self._coord(xu14, y14, 0)
+                self._coord(xu14, y13, 0)
+                self._coord(xu15, y13, 0)
+                self._coord(xu15, y14, 0)
+            elif self.length_left > 699:
+                self._coord(xu10, y14, 0)
+                self._coord(xu10, y13, 0)
+                self._coord(xu11, y13, 0)
+                self._coord(xu11, y14, 0)
+            self._coord(xu1, y14, 0)
+            self._coord(xu1, y12, 0)
+            self._coord(xu4, yu3, 0)
+            self._coord(xu5, y8, -1)
+            self._coord(xu6, yu3, 0)
+            self._coord(xu9, y12, 0)
+            self._coord(xu9, y14, 0)
+            if self.length_right > 1499:
+                self._coord(xu18, y14, 0)
+                self._coord(xu18, y13, 0)
+                self._coord(xu19, y13, 0)
+                self._coord(xu19, y14, 0)
+                self._coord(xu20, y14, 0)
+                self._coord(xu20, y13, 0)
+                self._coord(xu21, y13, 0)
+                self._coord(xu21, y14, 0)
+            elif self.length_right > 699:
+                self._coord(xu16, y14, 0)
+                self._coord(xu16, y13, 0)
+                self._coord(xu17, y13, 0)
+                self._coord(xu17, y14, 0)
+        else:
+            if self.length > 1499:
+                self._coord(x23, y14, 0)
+                self._coord(x23, y13, 0)
+                self._coord(x24, y13, 0)
+                self._coord(x24, y14, 0)
+                self._coord(x25, y14, 0)
+                self._coord(x25, y13, 0)
+                self._coord(x26, y13, 0)
+                self._coord(x26, y14, 0)
+            elif self.length > 699:
+                self._coord(x11, y14, 0)
+                self._coord(x11, y13, 0)
+                self._coord(x12, y13, 0)
+                self._coord(x12, y14, 0)
         self._coord(x14, y14, 0)
         self._coord(x14, y13, 0)
         self._coord(x15, y13, 0)
@@ -716,6 +781,14 @@ class Cassette:
         self._coord(x16, y2, 0)
         self._coord(x13, y2, 0)
         self._coord(x13, y1, 0)
+        if self.angular:
+            self._coord(xu8, y1, 0)
+            self._coord(xu8, yu1, 0)
+            self._coord(xu7, yu2, 0)
+            self._coord(xu5, yu2, -1)
+            self._coord(xu3, yu2, 0)
+            self._coord(xu2, yu1, 0)
+            self._coord(xu2, y1, 0)
         self._coord(x10, y1, 0)
         self._coord(x10, y2, 0)
         self._coord(x7, y2, 0)
@@ -938,10 +1011,18 @@ class Cassette:
         x5 = round(self.length + self.depth + 0.5, 8)
         x6 = round(self.depth + (self.length / 3) + 10, 8)
         x7 = round(self.depth + (self.length / 1.5) + 10, 8)
+        if self.angular:
+            xu1 = round(self.length_left / 3 + self.depth + 10, 8)
+            xu2 = round(self.length_left / 1.5 + self.depth + 10, 8)
+            xu3 = round(self.length_left / 2 + self.depth + 10, 8)
+            xu4 = round(self.length_left + (self.length_right / 3) + self.depth + 8, 8)
+            xu5 = round(self.length_left + (self.length_right / 1.5) + self.depth + 8, 8)
+            xu6 = round(self.length_left + (self.length_right / 2) + self.depth + 8, 8)
+
 
         y1 = round(self.depth / 2 + 3, 8)
         y2 = round(self.width + (self.depth * 2) + self.rust - 5.5, 8)
-
+        
         #монтажные отверстия
         self._draw_hole(x1, y2)
         self._draw_hole(x5, y2)
@@ -949,22 +1030,48 @@ class Cassette:
         #дренажные отверстия
         self._draw_hole(x2, y1)
         self._draw_hole(x4, y1)
-        
-        if self.length > 1499:
-            #монтажные отверстия
-            self._draw_hole(x6, y2)
-            self._draw_hole(x7, y2)
+        if self.angular:
+            if self.length_left > 1499:
+                #монтажные отверстия
+                self._draw_hole(xu1, y2)
+                self._draw_hole(xu2, y2)
+                #дренажные отверстия
+                self._draw_hole(xu1, y1)
+                self._draw_hole(xu2, y1)
+            elif self.length_left > 699:
+                #монтажные отверстия
+                self._draw_hole(xu3, y2)
+                #дренажные отверстия
+                self._draw_hole(xu3, y1)
+            if self.length_right > 1499:
+                #монтажные отверстия
+                self._draw_hole(xu4, y2)
+                self._draw_hole(xu5, y2)
+                #дренажные отверстия
+                self._draw_hole(xu4, y1)
+                self._draw_hole(xu5, y1)
+            elif self.length_right > 699:
+                #монтажные отверстия
+                self._draw_hole(xu6, y2)
+                #дренажные отверстия
+                self._draw_hole(xu6, y1)
+        else:
 
-            #дренажные отверстия
-            self._draw_hole(x6, y1)
-            self._draw_hole(x7, y1)
-            
-        elif self.length > 699:
-            #монтажные отверстия
-            self._draw_hole(x3, y2)
+            if self.length > 1499:
+                #монтажные отверстия
+                self._draw_hole(x6, y2)
+                self._draw_hole(x7, y2)
 
-            #дренажные отверстия
-            self._draw_hole(x3, y1)
+                #дренажные отверстия
+                self._draw_hole(x6, y1)
+                self._draw_hole(x7, y1)
+                
+            elif self.length > 699:
+                #монтажные отверстия
+                self._draw_hole(x3, y2)
+
+                #дренажные отверстия
+                self._draw_hole(x3, y1)
 
     def generate(self):
         self._add("DRAWING")
@@ -983,6 +1090,6 @@ class Cassette:
         return "\n".join(self.result)
 
 
-#if __name__ == "__main__":
-#    example = Cassette("kot", 700, 580, "Zink", "1.0", 10)
-#    print(example.generate())
+if __name__ == "__main__":
+    example = Cassette("kzt", 498, 500, "Zink", "1.0", 10, True, True, 20, 20, 250, 250, None, True)
+    print(example.generate())
