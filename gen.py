@@ -356,23 +356,33 @@ class Cassette:
                     start_y -= 25
             
             elif 32 < length < 50:
-                tool = "RECT_5X30"
-                punch = "NIBBLE"
-                step = 29
-                if direction == "up":
-                    if start_y < 50:
-                        start_y += 1
-                        end_y += 1
-                    else:
-                        start_y -= 1
+                if self.angular and self.tape == "kzt":
+                    tool = "RECT_3X10"
+                    punch = "NIBBLE"
+                    step = 8
+                    if direction == "up":
                         end_y -= 1
-                elif direction == "down":
-                    if start_y < 50:
-                        start_y += 1
-                        end_y += 1
-                    else:
+                    elif direction == "down":
                         start_y -= 1
-                        end_y -= 1
+
+                else:
+                    tool = "RECT_5X30"
+                    punch = "NIBBLE"
+                    step = 29
+                    if direction == "up":
+                        if start_y < 50:
+                            start_y += 1
+                            end_y += 1
+                        else:
+                            start_y -= 1
+                            end_y -= 1
+                    elif direction == "down":
+                        if start_y < 50:
+                            start_y += 1
+                            end_y += 1
+                        else:
+                            start_y -= 1
+                            end_y -= 1
             elif length == 55:
                 tool = "RECT_5X50"
                 punch = "NIBBLE"
@@ -406,8 +416,16 @@ class Cassette:
                         start_x -= 1
                         end_x += 1
                     elif direction == "left":
-                        start_x += 1
-                        end_x -= 1
+                        if self.angular:
+                            if end_x < 100:
+                                start_x -= 1
+                                end_x -= 1
+                            else:
+                                start_x += 1
+                                end_x += 1
+                        else:
+                            start_x += 1
+                            end_x -= 1
                     elif direction == "up":
                         start_y -= 1
                         end_y += 1
