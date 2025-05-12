@@ -1,0 +1,33 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Editor config files
+.vscode/
+.idea/
+*.swp
+
+# Logs and databases
+*.log
+*.sqlite3
+
+# Python egg metadata
+*.egg-info/
+*.egg
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Mac OS and system files
+.DS_Store
+Thumbs.db
+
+# CP-generated files (если временные)
+*.cp
