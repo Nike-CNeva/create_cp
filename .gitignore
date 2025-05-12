@@ -31,3 +31,4 @@ Thumbs.db
 
 # CP-generated files (если временные)
 *.cp
+*.spec
