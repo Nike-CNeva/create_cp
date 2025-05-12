@@ -556,7 +556,7 @@ class Cassette:
                 "contour_punching": False,
                 "type_punching": "STRIKE",
                 "step": None,
-                "tool": "RND_4",  # круглая пробивка Ø4
+                "tool": "RND_4_MT",  # круглая пробивка Ø4
                 "rotation": 0.0,
                 "x_start": center_x,
                 "y_start": center_y,
