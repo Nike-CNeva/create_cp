@@ -11,7 +11,7 @@ from gen import Cassette
 class CreateCPFile:
     def __init__(self):
         self.window = tk.Tk()
-        self.window.title("Создание файлов заготовок кассет v2.1")
+        self.window.title("Создание файлов заготовок кассет v2.2")
         window_width = 410
         window_height = 250
         screen_width = self.window.winfo_screenwidth()

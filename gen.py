@@ -166,6 +166,40 @@ class Cassette:
                 elif direction == "down":
                     start_y -= 4
             
+            elif 28.72 < length < 28.73:
+                tool = "RECT_3X10"
+                punch = "NIBBLE"
+                step = 8
+                if direction == "up":
+                    orientation = 132.2498
+                    start_x -= 3.41531120
+                    start_y -= 0.66046281
+                    end_x += 2.97215363
+                    end_y += 2.30744696
+                elif direction == "down":
+                    orientation = 47.75
+                    start_x -= 15.89576157
+                    start_y -= 11.92030508
+                    end_x += 16.33892422
+                    end_y += 13.56729713
+            
+            elif 17.63 < length < 17.64:
+                tool = "RECT_3X10"
+                punch = "NIBBLE"
+                step = 8
+                if direction == "up":
+                    orientation = 47.5
+                    start_x += 8.47806533
+                    start_y += 3.66886667
+                    end_x -= 8.92843822
+                    end_y -= 5.32699863
+                elif direction == "down":
+                    orientation = 132.5
+                    start_x += 3.43423993
+                    start_y += 0.66886667
+                    end_x -= 2.98386704
+                    end_y -= 2.32699863
+            
             elif length == 18.0:
                 tool = "RECT_3X10"
                 punch = "NIBBLE"
@@ -417,12 +451,18 @@ class Cassette:
                         end_x += 1
                     elif direction == "left":
                         if self.angular:
-                            if end_x < 100:
+                            if self.length_left + 8 < start_x  < self.length_left + 13:
                                 start_x -= 1
                                 end_x -= 1
-                            else:
+
+                            elif self.length_left + 43 < end_x  < self.length_left + 53:
                                 start_x += 1
                                 end_x += 1
+
+                            else:
+                                start_x += 1
+                                end_x -= 1
+
                         else:
                             start_x += 1
                             end_x -= 1
@@ -1108,6 +1148,6 @@ class Cassette:
         return "\n".join(self.result)
 
 
-if __name__ == "__main__":
-    example = Cassette("kzt", 498, 500, "Zink", "1.0", 10, True, True, 20, 20, 250, 250, None, True)
-    print(example.generate())
+#if __name__ == "__main__":
+#    example = Cassette("kzt", 2248, 500, "Zink", "1.0", 10, True, True, 20, 20, 1500, 750, None, True)
+#    print(example.generate())
